@@ -2,139 +2,139 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat AI Chyko</title>
+    <title>Digital Class 7.1 AI Assistant</title>
     <style>
-        /* Gaya dasar punya kamu */
-        body { 
-            background-color: #0d0d0d; 
-            color: #ffffff; 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            margin: 0; 
-            display: flex; 
-            flex-direction: column; 
-            height: 100vh; 
+        :root {
+            --bg: #090a0f;
+            --sidebar: #11141b;
+            --hijau: #00ff88;
+            --ungu: #8a2be2;
+            --biru-muda: #00d4ff;
+            --text: #e0e0e0;
         }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; display: flex; height: 100vh; overflow: hidden; }
+        
+        /* SIDEBAR LAMA */
+        .sidebar { width: 300px; background: var(--sidebar); border-right: 1px solid #222; display: flex; flex-direction: column; padding: 25px; }
+        .logo { 
+            font-size: 20px; font-weight: 900; 
+            background: linear-gradient(to right, var(--hijau), var(--ungu)); 
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
+            margin-bottom: 30px; text-transform: uppercase; 
+        }
+        .btn-new-chat { background: linear-gradient(90deg, var(--hijau), var(--biru-muda)); color: #000; border: none; padding: 14px; border-radius: 12px; font-weight: 800; cursor: pointer; margin-bottom: 25px; transition: 0.3s; }
+        
+        .history-list { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
+        .history-item { background: rgba(255, 255, 255, 0.03); padding: 12px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; border: 1px solid transparent; cursor: pointer; }
+        .history-item:hover { border-color: var(--hijau); }
+        .del-btn { color: #ff4444; background: none; border: none; cursor: pointer; font-size: 20px; font-weight: bold; }
 
-        /* Container Chat - DIBUAT LUAS */
-        #chat-box { 
-            flex: 1; 
-            padding: 20px; 
-            overflow-y: auto; 
-            display: flex; 
-            flex-direction: column; 
-            gap: 15px;
-            width: 100%; /* Penuhin layar */
-            max-width: 1200px; /* Batas maksimal biar gak terlalu lebar di monitor gede */
-            margin: 0 auto; /* Tengahin */
-        }
+        .sidebar-footer { margin-top: 20px; padding-top: 15px; border-top: 1px solid #222; font-size: 13px; }
+        .powered { color: var(--biru-muda); font-weight: 800; }
 
-        /* Bubble Chat persis gaya lama kamu */
-        .message { 
-            padding: 15px 20px; 
-            border-radius: 12px; 
-            max-width: 85%; /* Lebih lebar ke samping */
-            line-height: 1.5;
-            font-size: 16px;
-        }
-
-        .ai { 
-            background: #1e1e1e; 
-            align-self: flex-start; 
-            border: 1px solid #333; 
-        }
-
-        .user { 
-            background: #00ffa3; 
-            color: #000; 
-            align-self: flex-end; 
-            font-weight: bold; 
-        }
-
-        /* Area Input di bawah */
-        .input-area { 
-            padding: 25px; 
-            background: #0d0d0d; 
-            display: flex; 
-            justify-content: center;
-            border-top: 1px solid #222;
-        }
-
-        .wrapper {
-            display: flex;
-            width: 100%;
-            max-width: 1200px; /* Samakan lebarnya dengan chat box */
-            gap: 10px;
-        }
-
-        input { 
-            flex: 1; 
-            padding: 15px 20px; 
-            border-radius: 30px; /* Gaya oval punya kamu */
-            border: 2px solid #8a2be2; /* Border ungu neon */
-            background: #000; 
-            color: #fff; 
-            outline: none;
-            font-size: 16px;
-        }
-
-        button { 
-            padding: 0 25px; 
-            background: #8a2be2; 
-            color: white; 
-            border: none; 
-            border-radius: 30px; 
-            cursor: pointer; 
-            font-weight: bold;
-        }
+        /* MAIN AREA LAMA */
+        .main { flex: 1; display: flex; flex-direction: column; background: radial-gradient(circle at top right, #1a1033, transparent); position: relative; }
+        #welcomeScreen { position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%); text-align: center; width: 85%; }
+        #welcomeScreen h1 { color: var(--hijau); font-size: 45px; font-weight: 900; text-shadow: 0 0 40px rgba(0, 255, 136, 0.5); }
+        
+        #chatBox { flex: 1; overflow-y: auto; padding: 50px 15% 150px 15%; display: flex; flex-direction: column; gap: 25px; }
+        .msg { max-width: 80%; padding: 18px 25px; border-radius: 20px; line-height: 1.6; }
+        .user-msg { align-self: flex-end; background: linear-gradient(135deg, var(--biru-muda), var(--hijau)); color: #000; font-weight: 600; }
+        .ai-msg { align-self: flex-start; background: #1e2029; border: 1px solid #333; }
+        
+        .input-area { position: absolute; bottom: 40px; left: 15%; right: 15%; background: #161821; border: 2px solid var(--ungu); border-radius: 18px; padding: 15px 30px; display: flex; align-items: center; gap: 20px; box-shadow: 0 0 40px rgba(138, 43, 226, 0.3); }
+        input { flex: 1; background: none; border: none; color: white; font-size: 18px; outline: none; }
+        .btn-send { color: var(--hijau); font-weight: 900; cursor: pointer; background: none; border: none; }
     </style>
 </head>
 <body>
-
-    <div id="chat-box">
-        <div class="message ai">Halo! Ini tampilan lama kamu yang sudah diperluas. Ada yang bisa dibantu?</div>
+    <div class="sidebar">
+        <div class="logo">Digital Class 7.1</div>
+        <button class="btn-new-chat" onclick="createNewChat()">+ CHAT BARU</button>
+        <div id="historyList" class="history-list"></div>
+        <div class="sidebar-footer">
+            <div class="powered">Powered by Beni Jaya</div>
+            <div style="color:var(--hijau)">Creator: Chyko</div>
+        </div>
     </div>
 
-    <div class="input-area">
-        <div class="wrapper">
-            <input type="text" id="user-input" placeholder="Tanyakan apa saja...">
-            <button onclick="sendMessage()">KIRIM</button>
+    <div class="main">
+        <div id="welcomeScreen"><h1>Halo, Saya diprogram Chyko untuk menjawab pertanyaan anda</h1></div>
+        <div id="chatBox"></div>
+        <div class="input-area">
+            <input type="text" id="userInput" placeholder="Tanyakan apa saja..." autocomplete="off">
+            <button class="btn-send" onclick="sendChat()">KIRIM</button>
         </div>
     </div>
 
     <script>
-        async function sendMessage() {
-            const input = document.getElementById('user-input');
-            const box = document.getElementById('chat-box');
-            const msg = input.value;
-            if (!msg) return;
+        const chatBox = document.getElementById('chatBox');
+        const userInput = document.getElementById('userInput');
+        const historyList = document.getElementById('historyList');
+        const welcomeScreen = document.getElementById('welcomeScreen');
 
-            // Tampilkan pesan kamu
-            box.innerHTML += `<div class="message user">${msg}</div>`;
-            input.value = '';
-            box.scrollTop = box.scrollHeight;
+        let sessions = JSON.parse(localStorage.getItem('dc71_final')) || [];
+        let activeIdx = null;
+
+        function renderHistory() {
+            historyList.innerHTML = '';
+            sessions.forEach((s, i) => {
+                historyList.innerHTML += `
+                    <div class="history-item" style="${i === activeIdx ? 'border-color:var(--hijau)' : ''}">
+                        <span style="flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap" onclick="loadSession(${i})">${s.title}</span>
+                        <button class="del-btn" onclick="deleteSession(event, ${i})">×</button>
+                    </div>`;
+            });
+        }
+
+        function createNewChat() {
+            activeIdx = null; chatBox.innerHTML = ''; welcomeScreen.style.display = 'block'; userInput.value = ''; renderHistory();
+        }
+
+        function loadSession(i) {
+            activeIdx = i; welcomeScreen.style.display = 'none'; chatBox.innerHTML = '';
+            sessions[i].chats.forEach(c => {
+                chatBox.innerHTML += `<div class="msg ${c.role}-msg">${c.text}</div>`;
+            });
+            chatBox.scrollTop = chatBox.scrollHeight; renderHistory();
+        }
+
+        function deleteSession(e, i) {
+            e.stopPropagation(); sessions.splice(i, 1);
+            localStorage.setItem('dc71_final', JSON.stringify(sessions));
+            if (activeIdx === i) createNewChat(); renderHistory();
+        }
+
+        async function sendChat() {
+            const val = userInput.value.trim();
+            if (!val) return;
+            welcomeScreen.style.display = 'none';
+            chatBox.innerHTML += `<div class="msg user-msg">${val}</div>`;
+            userInput.value = '';
 
             try {
-                const response = await fetch('https://bloodier-rey-riotingly.ngrok-free.dev/api/ai', {
-                    method: 'POST',
-                    headers: { 
-                        'Content-Type': 'application/json',
-                        'ngrok-skip-browser-warning': 'true'
-                    },
-                    body: JSON.stringify({ message: msg })
+                const res = await fetch('https://bloodier-rey-riotingly.ngrok-free.dev/api/ai/api/ai', {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ prompt: val })
                 });
+                const data = await res.json();
+                const reply = data.reply;
+                chatBox.innerHTML += `<div class="msg ai-msg">${reply}</div>`;
 
-                const data = await response.json();
-                
-                // Pake logika "Cari Sampe Dapet" biar gak undefined
-                const hasil = data.reply || data.response || data.text || "Server gak ngirim jawaban";
-
-                box.innerHTML += `<div class="message ai">${hasil}</div>`;
-                box.scrollTop = box.scrollHeight;
-            } catch (e) {
-                box.innerHTML += `<div class="message ai" style="color: #ff4d4d;">ERROR: Cek CMD di Laptop!</div>`;
-            }
+                if (activeIdx === null) {
+                    sessions.unshift({ title: val.substring(0, 20), chats: [{role:'user', text:val}, {role:'ai', text:reply}] });
+                    activeIdx = 0;
+                } else {
+                    sessions[activeIdx].chats.push({role:'user', text:val}, {role:'ai', text:reply});
+                }
+                localStorage.setItem('dc71_final', JSON.stringify(sessions));
+                renderHistory();
+            } catch { chatBox.innerHTML += `<div class="msg ai-msg" style="color:red">Server Error!</div>`; }
+            chatBox.scrollTop = chatBox.scrollHeight;
         }
+
+        userInput.onkeypress = (e) => { if(e.key === 'Enter') sendChat(); };
+        renderHistory();
     </script>
 </body>
 </html>
