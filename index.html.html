@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Digital Class 7.1 AI Assistant</title>
+    <style>
+        :root {
+            --bg: #090a0f;
+            --sidebar: #11141b;
+            --hijau: #00ff88;
+            --ungu: #8a2be2;
+            --biru-muda: #00d4ff;
+            --text: #e0e0e0;
+        }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; display: flex; height: 100vh; overflow: hidden; }
+        
+        /* SIDEBAR LAMA */
+        .sidebar { width: 300px; background: var(--sidebar); border-right: 1px solid #222; display: flex; flex-direction: column; padding: 25px; }
+        .logo { 
+            font-size: 20px; font-weight: 900; 
+            background: linear-gradient(to right, var(--hijau), var(--ungu)); 
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
+            margin-bottom: 30px; text-transform: uppercase; 
+        }
+        .btn-new-chat { background: linear-gradient(90deg, var(--hijau), var(--biru-muda)); color: #000; border: none; padding: 14px; border-radius: 12px; font-weight: 800; cursor: pointer; margin-bottom: 25px; transition: 0.3s; }
+        
+        .history-list { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
+        .history-item { background: rgba(255, 255, 255, 0.03); padding: 12px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; border: 1px solid transparent; cursor: pointer; }
+        .history-item:hover { border-color: var(--hijau); }
+        .del-btn { color: #ff4444; background: none; border: none; cursor: pointer; font-size: 20px; font-weight: bold; }
+
+        .sidebar-footer { margin-top: 20px; padding-top: 15px; border-top: 1px solid #222; font-size: 13px; }
+        .powered { color: var(--biru-muda); font-weight: 800; }
+
+        /* MAIN AREA LAMA */
+        .main { flex: 1; display: flex; flex-direction: column; background: radial-gradient(circle at top right, #1a1033, transparent); position: relative; }
+        #welcomeScreen { position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%); text-align: center; width: 85%; }
+        #welcomeScreen h1 { color: var(--hijau); font-size: 45px; font-weight: 900; text-shadow: 0 0 40px rgba(0, 255, 136, 0.5); }
+        
+        #chatBox { flex: 1; overflow-y: auto; padding: 50px 15% 150px 15%; display: flex; flex-direction: column; gap: 25px; }
+        .msg { max-width: 80%; padding: 18px 25px; border-radius: 20px; line-height: 1.6; }
+        .user-msg { align-self: flex-end; background: linear-gradient(135deg, var(--biru-muda), var(--hijau)); color: #000; font-weight: 600; }
+        .ai-msg { align-self: flex-start; background: #1e2029; border: 1px solid #333; }
+        
+        .input-area { position: absolute; bottom: 40px; left: 15%; right: 15%; background: #161821; border: 2px solid var(--ungu); border-radius: 18px; padding: 15px 30px; display: flex; align-items: center; gap: 20px; box-shadow: 0 0 40px rgba(138, 43, 226, 0.3); }
+        input { flex: 1; background: none; border: none; color: white; font-size: 18px; outline: none; }
+        .btn-send { color: var(--hijau); font-weight: 900; cursor: pointer; background: none; border: none; }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo">Digital Class 7.1</div>
+        <button class="btn-new-chat" onclick="createNewChat()">+ CHAT BARU</button>
+        <div id="historyList" class="history-list"></div>
+        <div class="sidebar-footer">
+            <div class="powered">Powered by Beni Jaya</div>
+            <div style="color:var(--hijau)">Creator: Chyko</div>
+        </div>
+    </div>
+
+    <div class="main">
+        <div id="welcomeScreen"><h1>Halo, Saya diprogram Chyko untuk menjawab pertanyaan anda</h1></div>
+        <div id="chatBox"></div>
+        <div class="input-area">
+            <input type="text" id="userInput" placeholder="Tanyakan apa saja..." autocomplete="off">
+            <button class="btn-send" onclick="sendChat()">KIRIM</button>
+        </div>
+    </div>
+
+    <script>
+        const chatBox = document.getElementById('chatBox');
+        const userInput = document.getElementById('userInput');
+        const historyList = document.getElementById('historyList');
+        const welcomeScreen = document.getElementById('welcomeScreen');
+
+        let sessions = JSON.parse(localStorage.getItem('dc71_final')) || [];
+        let activeIdx = null;
+
+        function renderHistory() {
+            historyList.innerHTML = '';
+            sessions.forEach((s, i) => {
+                historyList.innerHTML += `
+                    <div class="history-item" style="${i === activeIdx ? 'border-color:var(--hijau)' : ''}">
+                        <span style="flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap" onclick="loadSession(${i})">${s.title}</span>
+                        <button class="del-btn" onclick="deleteSession(event, ${i})">×</button>
+                    </div>`;
+            });
+        }
+
+        function createNewChat() {
+            activeIdx = null; chatBox.innerHTML = ''; welcomeScreen.style.display = 'block'; userInput.value = ''; renderHistory();
+        }
+
+        function loadSession(i) {
+            activeIdx = i; welcomeScreen.style.display = 'none'; chatBox.innerHTML = '';
+            sessions[i].chats.forEach(c => {
+                chatBox.innerHTML += `<div class="msg ${c.role}-msg">${c.text}</div>`;
+            });
+            chatBox.scrollTop = chatBox.scrollHeight; renderHistory();
+        }
+
+        function deleteSession(e, i) {
+            e.stopPropagation(); sessions.splice(i, 1);
+            localStorage.setItem('dc71_final', JSON.stringify(sessions));
+            if (activeIdx === i) createNewChat(); renderHistory();
+        }
+
+        async function sendChat() {
+            const val = userInput.value.trim();
+            if (!val) return;
+            welcomeScreen.style.display = 'none';
+            chatBox.innerHTML += `<div class="msg user-msg">${val}</div>`;
+            userInput.value = '';
+
+            try {
+                const res = await fetch('http://localhost:3000/api/ai', {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ prompt: val })
+                });
+                const data = await res.json();
+                const reply = data.reply;
+                chatBox.innerHTML += `<div class="msg ai-msg">${reply}</div>`;
+
+                if (activeIdx === null) {
+                    sessions.unshift({ title: val.substring(0, 20), chats: [{role:'user', text:val}, {role:'ai', text:reply}] });
+                    activeIdx = 0;
+                } else {
+                    sessions[activeIdx].chats.push({role:'user', text:val}, {role:'ai', text:reply});
+                }
+                localStorage.setItem('dc71_final', JSON.stringify(sessions));
+                renderHistory();
+            } catch { chatBox.innerHTML += `<div class="msg ai-msg" style="color:red">Server Error!</div>`; }
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        userInput.onkeypress = (e) => { if(e.key === 'Enter') sendChat(); };
+        renderHistory();
+    </script>
+</body>
+</html>
