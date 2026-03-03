@@ -1,120 +1,87 @@
 <!DOCTYPE html>
-<html lang="id">
+<html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Digital Class AI</title>
+    <title>Chat AI</title>
     <style>
-        /* RESET & BASE */
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
-        body { background-color: #0d0d0d; color: white; display: flex; height: 100vh; overflow: hidden; }
+        /* Pakai gaya yang lama tapi dibuat luas */
+        body { 
+            background-color: #0d0d0d; 
+            color: white; 
+            font-family: sans-serif; 
+            margin: 0; 
+            display: flex; 
+            flex-direction: column; 
+            height: 100vh; 
+        }
 
-        /* SIDEBAR (Tetap kayak foto kamu) */
-        .sidebar {
-            width: 260px;
-            background-color: #121212;
-            padding: 20px;
+        #chat-box { 
+            flex: 1; 
+            padding: 20px; 
+            overflow-y: auto; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 15px;
+            /* Lebar chat diatur di sini biar luas */
+            max-width: 1000px; 
+            margin: 0 auto;
+            width: 95%;
+        }
+
+        .message { 
+            padding: 12px 18px; 
+            border-radius: 10px; 
+            max-width: 85%; 
+            line-height: 1.5;
+        }
+
+        .ai { background: #222; align-self: flex-start; border: 1px solid #333; }
+        .user { background: #00ffa3; color: black; align-self: flex-end; font-weight: bold; }
+
+        .input-area { 
+            padding: 20px; 
+            background: #111; 
+            display: flex; 
+            justify-content: center;
+        }
+
+        .wrapper {
             display: flex;
-            flex-direction: column;
-            border-right: 1px solid #333;
-        }
-        .brand { color: #00ffa3; font-weight: bold; margin-bottom: 20px; }
-        .btn-new-chat {
-            background: linear-gradient(90deg, #00f2fe 0%, #4facfe 100%);
-            border: none; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; margin-bottom: 20px;
-        }
-
-        /* AREA CHAT UTAMA (Dibuat Lebih Luas) */
-        .main-chat {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            background: radial-gradient(circle at top right, #1a1a2e, #0d0d0d);
-        }
-
-        #chat-box {
-            flex: 1;
-            padding: 40px 10% 120px 10%; /* Area chat luas ke tengah */
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        /* BUBBLE CHAT DIPERLUAS */
-        .message {
-            max-width: 85%; /* Lebih lebar dari sebelumnya */
-            padding: 15px 20px;
-            border-radius: 15px;
-            font-size: 16px;
-            line-height: 1.6;
-        }
-        .ai { align-self: flex-start; background: rgba(255, 255, 255, 0.05); border: 1px solid #333; }
-        .user { align-self: flex-end; background: #00ffa3; color: black; font-weight: 500; }
-
-        /* INPUT AREA (Persis kayak foto kamu) */
-        .input-container {
-            position: absolute;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80%; /* Luas input di bawah */
+            width: 100%;
             max-width: 1000px;
+            gap: 10px;
         }
 
-        .input-wrapper {
-            display: flex;
-            align-items: center;
-            background: rgba(0, 0, 0, 0.6);
-            border: 2px solid #8a2be2; /* Border ungu neon kamu */
-            border-radius: 30px;
-            padding: 10px 25px;
-            box-shadow: 0 0 15px rgba(138, 43, 226, 0.3);
+        input { 
+            flex: 1; 
+            padding: 15px; 
+            border-radius: 5px; 
+            border: 1px solid #8a2be2; 
+            background: #000; 
+            color: white; 
         }
 
-        input {
-            flex: 1;
-            background: transparent;
-            border: none;
-            color: white;
-            font-size: 16px;
-            outline: none;
+        button { 
+            padding: 15px 25px; 
+            background: #8a2be2; 
+            color: white; 
+            border: none; 
+            border-radius: 5px; 
+            cursor: pointer; 
         }
-
-        .btn-kirim {
-            background: transparent;
-            border: none;
-            color: #00ffa3;
-            font-weight: bold;
-            cursor: pointer;
-            letter-spacing: 1px;
-        }
-
-        /* Scrollbar biar rapi */
-        #chat-box::-webkit-scrollbar { width: 5px; }
-        #chat-box::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
     </style>
 </head>
 <body>
 
-    <div class="sidebar">
-        <div class="brand">DIGITAL CLASS 7.1</div>
-        <button class="btn-new-chat">+ CHAT BARU</button>
-        <div style="color: #666; font-size: 12px; margin-top: auto;">Powered by Beni Jaya<br>Creator: Chyko</div>
+    <div id="chat-box">
+        <div class="message ai">Halo! Ada yang bisa dibantu?</div>
     </div>
 
-    <div class="main-chat">
-        <div id="chat-box">
-            <div class="message ai">Halo! Saya siap membantu Anda dengan pertanyaan atau masalah yang Anda hadapi. Apa yang ingin Anda tanyakan?</div>
-            <div class="message user">halo</div>
-        </div>
-
-        <div class="input-container">
-            <div class="input-wrapper">
-                <input type="text" id="user-input" placeholder="Tanyakan apa saja...">
-                <button class="btn-kirim" onclick="sendMessage()">KIRIM</button>
-            </div>
+    <div class="input-area">
+        <div class="wrapper">
+            <input type="text" id="user-input" placeholder="Ketik di sini...">
+            <button onclick="sendMessage()">KIRIM</button>
         </div>
     </div>
 
@@ -122,10 +89,11 @@
         async function sendMessage() {
             const input = document.getElementById('user-input');
             const box = document.getElementById('chat-box');
-            if (!input.value) return;
+            const msg = input.value;
+            if (!msg) return;
 
-            box.innerHTML += `<div class="message user">${input.value}</div>`;
-            const text = input.value;
+            // Tampilkan pesan user
+            box.innerHTML += `<div class="message user">${msg}</div>`;
             input.value = '';
             box.scrollTop = box.scrollHeight;
 
@@ -136,13 +104,19 @@
                         'Content-Type': 'application/json',
                         'ngrok-skip-browser-warning': 'true'
                     },
-                    body: JSON.stringify({ message: text })
+                    body: JSON.stringify({ message: msg })
                 });
+
                 const data = await response.json();
-                box.innerHTML += `<div class="message ai">${data.reply}</div>`;
+                
+                // INI KUNCINYA BIAR GAK UNDEFINED:
+                // Dia bakal coba baca 'reply', kalau gak ada baca 'response', kalau gak ada baca 'text'
+                const hasil = data.reply || data.response || data.text || "Gagal baca respon server";
+
+                box.innerHTML += `<div class="message ai">${hasil}</div>`;
                 box.scrollTop = box.scrollHeight;
-            } catch (err) {
-                box.innerHTML += `<div class="message ai" style="color: #ff4d4d;">Server Error. Cek CMD Laptop!</div>`;
+            } catch (e) {
+                box.innerHTML += `<div class="message ai" style="color: red;">SERVER ERROR!</div>`;
             }
         }
     </script>
