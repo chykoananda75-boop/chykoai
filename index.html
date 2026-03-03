@@ -113,7 +113,7 @@
             userInput.value = '';
 
             try {
-                const res = await fetch('https://bloodier-rey-riotingly.ngrok-free.dev//api/ai', {
+                const res = await fetch('https://bloodier-rey-riotingly.ngrok-free.dev/api/ai', {
                     method: 'POST', headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ prompt: val })
                 });
@@ -138,4 +138,5 @@
     </script>
 </body>
 </html>
+
 
