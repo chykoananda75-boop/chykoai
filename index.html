@@ -1,21 +1,22 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat AI</title>
+    <title>Chat AI Chyko</title>
     <style>
-        /* Pakai gaya yang lama tapi dibuat luas */
+        /* Gaya dasar punya kamu */
         body { 
             background-color: #0d0d0d; 
-            color: white; 
-            font-family: sans-serif; 
+            color: #ffffff; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
             margin: 0; 
             display: flex; 
             flex-direction: column; 
             height: 100vh; 
         }
 
+        /* Container Chat - DIBUAT LUAS */
         #chat-box { 
             flex: 1; 
             padding: 20px; 
@@ -23,64 +24,80 @@
             display: flex; 
             flex-direction: column; 
             gap: 15px;
-            /* Lebar chat diatur di sini biar luas */
-            max-width: 1000px; 
-            margin: 0 auto;
-            width: 95%;
+            width: 100%; /* Penuhin layar */
+            max-width: 1200px; /* Batas maksimal biar gak terlalu lebar di monitor gede */
+            margin: 0 auto; /* Tengahin */
         }
 
+        /* Bubble Chat persis gaya lama kamu */
         .message { 
-            padding: 12px 18px; 
-            border-radius: 10px; 
-            max-width: 85%; 
+            padding: 15px 20px; 
+            border-radius: 12px; 
+            max-width: 85%; /* Lebih lebar ke samping */
             line-height: 1.5;
+            font-size: 16px;
         }
 
-        .ai { background: #222; align-self: flex-start; border: 1px solid #333; }
-        .user { background: #00ffa3; color: black; align-self: flex-end; font-weight: bold; }
+        .ai { 
+            background: #1e1e1e; 
+            align-self: flex-start; 
+            border: 1px solid #333; 
+        }
 
+        .user { 
+            background: #00ffa3; 
+            color: #000; 
+            align-self: flex-end; 
+            font-weight: bold; 
+        }
+
+        /* Area Input di bawah */
         .input-area { 
-            padding: 20px; 
-            background: #111; 
+            padding: 25px; 
+            background: #0d0d0d; 
             display: flex; 
             justify-content: center;
+            border-top: 1px solid #222;
         }
 
         .wrapper {
             display: flex;
             width: 100%;
-            max-width: 1000px;
+            max-width: 1200px; /* Samakan lebarnya dengan chat box */
             gap: 10px;
         }
 
         input { 
             flex: 1; 
-            padding: 15px; 
-            border-radius: 5px; 
-            border: 1px solid #8a2be2; 
+            padding: 15px 20px; 
+            border-radius: 30px; /* Gaya oval punya kamu */
+            border: 2px solid #8a2be2; /* Border ungu neon */
             background: #000; 
-            color: white; 
+            color: #fff; 
+            outline: none;
+            font-size: 16px;
         }
 
         button { 
-            padding: 15px 25px; 
+            padding: 0 25px; 
             background: #8a2be2; 
             color: white; 
             border: none; 
-            border-radius: 5px; 
+            border-radius: 30px; 
             cursor: pointer; 
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
 
     <div id="chat-box">
-        <div class="message ai">Halo! Ada yang bisa dibantu?</div>
+        <div class="message ai">Halo! Ini tampilan lama kamu yang sudah diperluas. Ada yang bisa dibantu?</div>
     </div>
 
     <div class="input-area">
         <div class="wrapper">
-            <input type="text" id="user-input" placeholder="Ketik di sini...">
+            <input type="text" id="user-input" placeholder="Tanyakan apa saja...">
             <button onclick="sendMessage()">KIRIM</button>
         </div>
     </div>
@@ -92,7 +109,7 @@
             const msg = input.value;
             if (!msg) return;
 
-            // Tampilkan pesan user
+            // Tampilkan pesan kamu
             box.innerHTML += `<div class="message user">${msg}</div>`;
             input.value = '';
             box.scrollTop = box.scrollHeight;
@@ -109,14 +126,13 @@
 
                 const data = await response.json();
                 
-                // INI KUNCINYA BIAR GAK UNDEFINED:
-                // Dia bakal coba baca 'reply', kalau gak ada baca 'response', kalau gak ada baca 'text'
-                const hasil = data.reply || data.response || data.text || "Gagal baca respon server";
+                // Pake logika "Cari Sampe Dapet" biar gak undefined
+                const hasil = data.reply || data.response || data.text || "Server gak ngirim jawaban";
 
                 box.innerHTML += `<div class="message ai">${hasil}</div>`;
                 box.scrollTop = box.scrollHeight;
             } catch (e) {
-                box.innerHTML += `<div class="message ai" style="color: red;">SERVER ERROR!</div>`;
+                box.innerHTML += `<div class="message ai" style="color: #ff4d4d;">ERROR: Cek CMD di Laptop!</div>`;
             }
         }
     </script>
