@@ -1,0 +1,5 @@
+ FFFFF  U   U  CCCCC  K   K     Y   Y  OOOOO  U   U
+ F      U   U  C      K  K       Y Y   O   O  U   U
+ FFFF   U   U  C      KKK         Y    O   O  U   U
+ F      U   U  C      K  K        Y    O   O  U   U
+ F       UUU   CCCCC  K   K       Y    OOOOO   UUU
