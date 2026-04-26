@@ -4,22 +4,36 @@ const { Ollama } = require('ollama');
 
 const app = express();
 
-// ganti 127.0.0.1 → 0.0.0.0
-const ollama = new Ollama({ host: 'http://0.0.0.0:11434' });
+// ✅ BALIKIN KE LOCALHOST (INI YANG BENER)
+const ollama = new Ollama({ host: 'http://127.0.0.1:11434' });
 
 app.use(cors()); 
 app.use(express.json());
 
+// test route biar tau server hidup
+app.get('/', (req, res) => {
+    res.send("DHAN AI SERVER HIDUP 🚀");
+});
+
 app.post('/api/ai', async (req, res) => {
     try {
         const { prompt } = req.body;
+
+        if (!prompt) {
+            return res.status(400).json({ error: "Prompt kosong!" });
+        }
+
         const lowPrompt = prompt.toLowerCase();
 
         let sysMsg = "Kamu adalah DHAN AI.";
-        if (lowPrompt.includes("siapa") || lowPrompt.includes("pencipta") || lowPrompt.includes("pembuat")) {
-            sysMsg += " Jawablah: 'Saya adalah DHAN AI yang diprogram Chyko. Pencipta saya adalah Chyko.'";
+        if (
+            lowPrompt.includes("siapa") ||
+            lowPrompt.includes("pencipta") ||
+            lowPrompt.includes("pembuat")
+        ) {
+            sysMsg += " Jawab: Saya adalah DHAN AI yang diprogram Chyko.";
         } else {
-            sysMsg += " Jawablah dengan cerdas, singkat, dan jelas.";
+            sysMsg += " Jawab dengan jelas, singkat, dan membantu.";
         }
 
         const response = await ollama.chat({
@@ -32,12 +46,17 @@ app.post('/api/ai', async (req, res) => {
         });
 
         res.json({ reply: response.message.content });
+
     } catch (error) {
-        res.status(500).json({ error: "Ollama error / belum jalan!" });
+        console.log("ERROR:", error); // 🔥 biar keliatan di terminal
+        res.status(500).json({
+            error: "Server error",
+            detail: error.message
+        });
     }
 });
 
-// 🔥 penting!
+// ✅ INI YANG BOLEH 0.0.0.0 (buat HP/ngrok)
 app.listen(3000, '0.0.0.0', () => {
     console.log("🚀 DHAN AI BACKEND READY!");
 });
