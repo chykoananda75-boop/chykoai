@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Digital Class 7.1 AI Assistant</title>
+    <title>DHAN AI</title>
     <style>
         :root {
             --bg: #090a0f;
@@ -14,7 +14,6 @@
         }
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; display: flex; height: 100vh; overflow: hidden; }
         
-        /* SIDEBAR LAMA */
         .sidebar { width: 300px; background: var(--sidebar); border-right: 1px solid #222; display: flex; flex-direction: column; padding: 25px; }
         .logo { 
             font-size: 20px; font-weight: 900; 
@@ -32,7 +31,6 @@
         .sidebar-footer { margin-top: 20px; padding-top: 15px; border-top: 1px solid #222; font-size: 13px; }
         .powered { color: var(--biru-muda); font-weight: 800; }
 
-        /* MAIN AREA LAMA */
         .main { flex: 1; display: flex; flex-direction: column; background: radial-gradient(circle at top right, #1a1033, transparent); position: relative; }
         #welcomeScreen { position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%); text-align: center; width: 85%; }
         #welcomeScreen h1 { color: var(--hijau); font-size: 45px; font-weight: 900; text-shadow: 0 0 40px rgba(0, 255, 136, 0.5); }
@@ -49,17 +47,17 @@
 </head>
 <body>
     <div class="sidebar">
-        <div class="logo">Digital Class 7.1</div>
+        <div class="logo">DHAN AI</div>
         <button class="btn-new-chat" onclick="createNewChat()">+ CHAT BARU</button>
         <div id="historyList" class="history-list"></div>
         <div class="sidebar-footer">
-            <div class="powered">Powered by Beni Jaya</div>
+            <div class="powered">Powered by DHAN AI</div>
             <div style="color:var(--hijau)">Creator: Chyko</div>
         </div>
     </div>
 
     <div class="main">
-        <div id="welcomeScreen"><h1>Halo, Saya diprogram Chyko untuk menjawab pertanyaan anda</h1></div>
+        <div id="welcomeScreen"><h1>Halo, Saya DHAN AI siap menjawab pertanyaan anda</h1></div>
         <div id="chatBox"></div>
         <div class="input-area">
             <input type="text" id="userInput" placeholder="Tanyakan apa saja..." autocomplete="off">
@@ -113,7 +111,7 @@
             userInput.value = '';
 
             try {
-                const res = await fetch('https://bloodier-rey-riotingly.ngrok-free.dev/api/ai', {
+                const res = await fetch('http://localhost:3000/api/ai', {
                     method: 'POST', headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ prompt: val })
                 });
@@ -138,5 +136,3 @@
     </script>
 </body>
 </html>
-
-
