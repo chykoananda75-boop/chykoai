@@ -3,7 +3,9 @@ const cors = require('cors');
 const { Ollama } = require('ollama');
 
 const app = express();
-const ollama = new Ollama({ host: 'http://127.0.0.1:11434' });
+
+// ganti 127.0.0.1 → 0.0.0.0
+const ollama = new Ollama({ host: 'http://0.0.0.0:11434' });
 
 app.use(cors()); 
 app.use(express.json());
@@ -13,16 +15,15 @@ app.post('/api/ai', async (req, res) => {
         const { prompt } = req.body;
         const lowPrompt = prompt.toLowerCase();
 
-        // LOGIKA IDENTITAS: Cek kata kunci
-        let sysMsg = "Kamu adalah Digital Class 7.1 AI Assistant.";
+        let sysMsg = "Kamu adalah DHAN AI.";
         if (lowPrompt.includes("siapa") || lowPrompt.includes("pencipta") || lowPrompt.includes("pembuat")) {
-            sysMsg += " Jawablah: 'Saya adalah AI yang diprogram Chyko untuk menuntaskan tugas sekolah atau pertanyaan dari anda. Pencipta saya adalah Chyko.'";
+            sysMsg += " Jawablah: 'Saya adalah DHAN AI yang diprogram Chyko. Pencipta saya adalah Chyko.'";
         } else {
-            sysMsg += " Jawablah pertanyaan user dengan cerdas, akurat, dan langsung ke intinya (seperti matematika). Jangan sebutkan namamu jika tidak ditanya.";
+            sysMsg += " Jawablah dengan cerdas, singkat, dan jelas.";
         }
 
         const response = await ollama.chat({
-            model: 'llama3', // Pastikan sudah install llama3 di ollama
+            model: 'llama3',
             messages: [
                 { role: 'system', content: sysMsg },
                 { role: 'user', content: prompt }
@@ -32,8 +33,11 @@ app.post('/api/ai', async (req, res) => {
 
         res.json({ reply: response.message.content });
     } catch (error) {
-        res.status(500).json({ error: "Ollama mati! Jalankan 'ollama serve'." });
+        res.status(500).json({ error: "Ollama error / belum jalan!" });
     }
 });
 
-app.listen(3000, () => console.log("🚀 BACKEND DIGITAL CLASS 7.1 READY!"));
+// 🔥 penting!
+app.listen(3000, '0.0.0.0', () => {
+    console.log("🚀 DHAN AI BACKEND READY!");
+});
